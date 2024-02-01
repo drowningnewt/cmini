@@ -995,5 +995,7 @@
     "quotient": 1,
     "teeth": 1,
     "shell": 1,
-    "neck": 1
+    "neck": 1,
+    "program": 1,
+    "public": 1
 }
