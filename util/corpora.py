@@ -1,7 +1,7 @@
 import json
 
 CORPUS = 'mt-quotes'
-NGRAMS = ['monograms', 'bigrams', 'trigrams']
+NGRAMS = ['monograms', 'bigrams', 'trigrams', 'tetragrams']
 
 LOADED: dict[str, dict] = {}
 
