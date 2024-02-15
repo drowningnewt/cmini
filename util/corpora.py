@@ -28,6 +28,9 @@ def bigrams():
 def trigrams():
     return ngrams(3)
 
+def tetragrams(): 
+    return ngrams(3)
+
 def words(id: int = 0):
     file = get_corpus(id)
     path = f'corpora/{file}/words.json'
