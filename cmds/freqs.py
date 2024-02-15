@@ -16,8 +16,8 @@ def exec(message: Message):
     id = message.author.id
     query = parser.get_args(message)
 
-    if not query or not (1 <= (ntype := len(query[0])) <= 3) or len(query) > 6:
-        return 'Please provide 1 to 6 ngrams of length 1-3 characters'
+    if not query or not (1 <= (ntype := len(query[0])) <= 4) or len(query) > 6:
+        return 'Please provide 1 to 6 ngrams of length 1-4 characters'
 
     ngrams = corpora.ngrams(ntype, id=id)
     corpus = corpora.get_corpus(id)
