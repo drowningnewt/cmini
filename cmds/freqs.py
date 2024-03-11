@@ -20,8 +20,8 @@ def exec(message: Message):
 
     ntype = len(query[0]) if len(query) > 0 else None
 
-    if not query or ntype < 1 or ntype > 3:
-        return "Please provide at least 1 ngram between 1-3 chars"
+    if not query or ntype < 1 or ntype > len(corpora.NGRAMS):
+        return f"Please provide at least 1 ngram between 1-{len(corpora.NGRAMS)} chars"
 
     if len(query) > 6:
         return "Please provide no more than 6 ngrams"
