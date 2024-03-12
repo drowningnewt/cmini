@@ -49,13 +49,15 @@ def exec(message: Message):
         
         if ntype > 1:
             freq_reverse = calculate_freq(reverse, ngrams)
-
-            res.extend([
-                f'{item} + {reverse}: {freq_original + freq_reverse:.2%}',
-                f'  {item}: {freq_original:.2%}',
-                f'  {reverse}: {freq_reverse:.2%}'
-            ])
-            total_freq += freq_reverse
+            if item != reverse:
+                res.extend([
+                    f'{item} + {reverse}: {freq_original + freq_reverse:.2%}',
+                    f'  {item}: {freq_original:.2%}',
+                    f'  {reverse}: {freq_reverse:.2%}'
+                ])
+                total_freq += freq_reverse
+            else: 
+                res.append(f'{item}: {freq_original:.2%}')
         elif ntype == 1:
             res.append(f'{item}: {freq_original:.2%}')
 
