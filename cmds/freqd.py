@@ -26,7 +26,7 @@ def exec(message: Message):
     if len(query) > 6:
         return "Please provide no more than 6 ngrams"
 
-    corpus = corpora.short_corpus(id, 7)
+    corpus = short_corpus(id, 7)
     start = f' {corpus.upper()}' + ' ' * (8 - len(corpus))
     alt = ['```', start]
 
@@ -84,3 +84,23 @@ def exec(message: Message):
             alt[-1] += f'| {freq:.2%} '
         alt.append('```')
     return '\n'.join(alt)
+
+def short_corpus(id: int, length: int):
+    name = corpora.get_corpus(id)
+
+    replacements = {"monkey": "m", "racer": "r", "type": "t", "-quotes": ""}
+
+    for key, value in replacements.items():
+        if key in name:
+            name = name.replace(key, value)
+
+    if name.startswith("english-"):
+        name = "e" + name[len("english-"):]
+    elif "-" in name:
+        parts = name.split("-")
+        name = f"{parts[0][0]}-{parts[1][0]}"
+
+    if len(name) > length:
+        name = name[:length]
+
+    return name
