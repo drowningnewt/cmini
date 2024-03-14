@@ -1,5 +1,7 @@
 {
   "qwerty": "https://en.wikipedia.org/wiki/QWERTY",
+	"qwerty2": "https://patents.google.com/patent/US568630",
+	"azerty": "https://en.wikipedia.org/wiki/AZERTY",
 	"qwerf": "http://www.michaelcapewell.com/projects/keyboard/index.htm#Introduction",
 	"norman": "https://normanlayout.info/",
 	"qgmlwy": "http://mkweb.bcgsc.ca/carpalx/?full_optimization",
@@ -90,5 +92,6 @@
 	"mine": "https://neo-layout.org/Layouts/mine/",
 	"bone": "https://neo-layout.org/Layouts/bone/",
 	"noted": "https://neo-layout.org/Layouts/noted/",
+	"koy": "https://adnw.de/index.php?n=Main.SeitlicheNachbaranschläge",
   "taipo": "https://inkeys.wiki/en/keymaps/taipo"
 }
