@@ -10,71 +10,69 @@ def exec(message: Message):
     id = message.author.id
     query = parser.get_args(message)
 
-    ntype = len(query[0]) if len(query) > 0 else None
-
-    if not query or ntype != 2:
-        return "Please provide at least 1 bigram"
+    if not query or not all(len(item) == 2 for item in query):
+        return "Please provide bigrams"
 
     if len(query) > 6:
         return "Please provide no more than 6 bigrams"
 
     corpus = short_corpus(id, 7)
     start = f' {corpus.upper()}' + ' ' * (8 - len(corpus))
-    alt = ['```', start]
+    res = ['```', start]
 
+    max_ngram = len(corpora.NGRAMS)
     processed_ngrams = set()
     freqs = []
 
-    dividers = f'{"-" * len(start)}{("-" * 8) * (len(corpora.NGRAMS) - 1)}'
+    dividers = f'{"-" * len(start)}{("-" * 8) * max_ngram}'
 
     for item in query:
-        if len(item) != ntype:
-            return 'All ngrams must be bigrams'
-
         rvrs = get_reverse(item)
 
         if item in processed_ngrams or rvrs in processed_ngrams:
             continue
-        alt.append(dividers)
+
+        res.append(dividers)
+        
+        # Add ngram and its reverse to the result; if it's a double letter, forgo reverse
         if item != rvrs:
-            alt.extend([f' {item} + {rvrs} ',
+            res.extend([f' {item} + {rvrs} ',
                         f'   {item}    ',
                         f'   {rvrs}    '])
         else: 
-            alt.append(f'   {item}    ')
+            res.append(f'   {item}    ')
 
-        for i in range(len(corpora.NGRAMS) - 1):
+        # Calculate frequencies for each ngram size
+        for i in range(max_ngram):
             ngrams = corpora.ngrams(i + 2, id=id)
             ogram = item[:1] + "_" * i + item[1:]
             rgram = get_reverse(ogram)
             freq_ogram = calculate_freq(ogram, ngrams)
             freq_rgram = calculate_freq(rgram, ngrams)
-            freq_grams = freq_ogram + freq_rgram
+            freq_grams = freq_ogram + (freq_rgram if item != rvrs else 0)
 
             if i < len(freqs): 
-                freqs[i] += freq_ogram + freq_rgram if item != rvrs else freq_ogram
+                freqs[i] += freq_grams
             else: 
-                freqs.insert(i, freq_ogram + freq_rgram if item != rvrs else freq_ogram)
+                freqs.append(freq_grams)
 
             if not processed_ngrams:
-                alt[1] += f'| x{"_" * i}x{" " * (6 - len(ogram))}'
+                res[1] += f'| x{"_" * i}x{" " * (6 - len(ogram))}'
             if item != rvrs:
-                alt[-3] += f'| {freq_grams:.2%} '
-                alt[-2] += f'| {freq_ogram:.2%} '
-                alt[-1] += f'| {freq_rgram:.2%} '
+                res[-3] += f'| {freq_grams:.2%} '
+                res[-2] += f'| {freq_ogram:.2%} '
+                res[-1] += f'| {freq_rgram:.2%} '
             else: 
-                alt[-1] += f'| {freq_ogram:.2%} '
+                res[-1] += f'| {freq_ogram:.2%} '
         
         processed_ngrams.update({item, rvrs})
 
-    if len(query) == 1 or all(item == query[0] or get_reverse(item) == query[0] for item in query):
-        alt.append('```')
-    elif len(query) > 1:
-        alt.extend([dividers, f' total   '])
-        for i, freq in enumerate(freqs):
-            alt[-1] += f'| {freq:.2%} '
-        alt.append('```')
-    return '\n'.join(alt)
+    # Add total frequencies if multiple bigrams are provided
+    if len(query) > 1:
+        res.extend([dividers, f' total   '])
+        res[-1] += ''.join([f'| {freq:.2%} ' for freq in freqs])
+    res.append('```')
+    return '\n'.join(res)
 
 def get_reverse(ngram):
     return ngram[::-1]
