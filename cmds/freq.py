@@ -28,8 +28,8 @@ def exec(message: Message):
     for item in query:
         if len(item) != ntype:
             return "All ngrams must be the same length"
-        count += calculate_freq(item, ngrams)
         freq = calculate_freq(item, ngrams)
+        count += freq
         res.append(f'{item}: {freq:.2%}')
     
     if count == 0:
@@ -41,10 +41,10 @@ def exec(message: Message):
     return '\n'.join(res)
 
 def use():
-	return "freq [ngrams ...]"
+    return "freq [ngrams ...]"
 
 def desc():
-	return "see the frequency of ngrams"
+    return "see the frequency of ngrams"
 
 def calculate_freq(item, ngrams):
     pattern = re.compile(item.replace('.', '\.').replace('_', '.'))
