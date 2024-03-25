@@ -1,13 +1,10 @@
 import re
+
 from discord import Message
+
 from util import corpora, parser
 
 RESTRICTED = True
-
-def calculate_freq(item, ngrams):
-    pattern = re.compile(item.replace('.', '\.').replace('_', '.'))
-    count = sum(value for key, value in ngrams.items() if pattern.search(key))
-    return count / sum(ngrams.values())
 
 def exec(message: Message):
     id = message.author.id
@@ -15,8 +12,8 @@ def exec(message: Message):
 
     ntype = len(query[0]) if len(query) > 0 else None
 
-    if not query or ntype < 1 or ntype > len(corpora.NGRAMS):
-        return f"Please provide at least 1 ngram between 1-{len(corpora.NGRAMS)} chars"
+    if not query or not 1 <= ntype <= len(corpora.NGRAMS):
+        return f'Please provide at least 1 ngram between 1-{len(corpora.NGRAMS)} chars'
 
     if len(query) > 6:
         return "Please provide no more than 6 ngrams"
@@ -31,16 +28,25 @@ def exec(message: Message):
     for item in query:
         if len(item) != ntype:
             return "All ngrams must be the same length"
-        pattern = re.compile(item.replace('.', '\.').replace('_', '.'))
-        count += sum(value for key, value in ngrams.items() if pattern.search(key))
+        count += calculate_freq(item, ngrams)
         freq = calculate_freq(item, ngrams)
         res.append(f'{item}: {freq:.2%}')
     
     if count == 0:
         return f"`{' '.join(query)}` not found in corpus `{corpus}`"
 
-    if len(query) == 1:
-        res.append('```')
-    elif len(query) > 1:
-        res.extend([f'Total: {count / total:.2%}', '```'])
+    if len(query) > 1:
+        res.extend([f'Total: {count / total:.2%}'])
+    res.append('```')
     return '\n'.join(res)
+
+def use():
+	return "freq [ngrams ...]"
+
+def desc():
+	return "see the frequency of ngrams"
+
+def calculate_freq(item, ngrams):
+    pattern = re.compile(item.replace('.', '\.').replace('_', '.'))
+    count = sum(value for key, value in ngrams.items() if pattern.search(key))
+    return count / sum(ngrams.values())
