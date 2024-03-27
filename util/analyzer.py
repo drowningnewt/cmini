@@ -2,6 +2,7 @@ import json
 from typing import Dict
 
 from core.keyboard import Layout
+from util.consts import *
 
 with open('table.json', 'r') as f:
     TABLE: Dict[str, str] = json.load(f)
@@ -11,6 +12,8 @@ def use(ll: Layout, grams: Dict[str, str]):
     fingers = {}
     
     for gram, count in grams.items():
+        gram = ''.join(SHIFT_PAIRS.get(char, char) for char in gram).lower()
+        
         if gram not in ll.keys:
             continue
 
@@ -36,6 +39,8 @@ def trigrams(ll: Layout, grams: Dict[str, int]):
     fingers = {x: ll.keys[x].finger for x in ll.keys}
 
     for gram, count in grams.items():
+        gram = ''.join(SHIFT_PAIRS.get(char, char) for char in gram).lower()
+        
         if ' ' in gram:
             continue
 
