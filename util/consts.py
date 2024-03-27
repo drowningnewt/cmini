@@ -28,3 +28,6 @@ FMAP_STANDARD = ['LP', 'LR', 'LM', 'LI', 'LI', 'RI', 'RI', 'RM', 'RR', 'RP']
 
 # row map for angle
 FMAP_ANGLE = ['LR', 'LM', 'LI', 'LI', 'LI', 'RI', 'RI', 'RM', 'RR', 'RP']
+
+# default shift pairs
+SHIFT_PAIRS = {"\"": "\'", ":": ";", "?": "/", "_": "-"}
