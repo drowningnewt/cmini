@@ -69,24 +69,9 @@ def get_fingermatrix(ll: Layout) -> list[list[str]]:
 
     for pos in ll.keys.values():
         finger = pos.finger
-        replacements = {
-            'LP': '0',
-            'LR': '1',
-            'LM': '2',
-            'LI': '3',
-            'RI': '4',
-            'RM': '5',
-            'RR': '6',
-            'RP': '7', 
-            'LT': '8',
-            'RT': '9',
-            'TB': '9'
-        }
-        
-        for key, value in replacements.items():
-            finger = finger.replace(key, value)
+        finger_val = FINGER_VALUES.get(finger, finger)
 
-        matrix[pos.row][pos.col] = finger
+        matrix[pos.row][pos.col] = finger_val
 
     for i, row in enumerate(matrix):
         for j, _ in enumerate(row):
