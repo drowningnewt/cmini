@@ -36,7 +36,7 @@ def exec(message: Message):
         return f"`{' '.join(query)}` not found in corpus `{corpus}`"
 
     if len(query) > 1:
-        res.extend([f'Total: {count / total:.2%}'])
+        res.extend([f'Total: {count:.2%}'])
     res.append('```')
     return '\n'.join(res)
 
