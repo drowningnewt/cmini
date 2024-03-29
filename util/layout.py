@@ -159,3 +159,37 @@ def to_string(ll: Layout, id: int):
     )
 
     return res
+
+
+def fingermap_to_string(ll: Layout):
+    author: str = authors.get_name(ll.user)
+
+    matrix_str = get_matrix_str(ll)
+    fmatrix_str = get_fingermatrix_str(ll)
+    
+    with open('likes.json', 'r') as f:
+        likes = json.load(f)
+
+    if ll.name in likes:
+        likes = len(likes[ll.name])
+    else:
+        likes = 0
+
+    if likes == 1:
+        like_string = 'like'
+    else:
+        like_string = 'likes'
+    
+    external_link = links.get_link(ll.name.lower())
+
+    res = (
+        f'```\n'
+        f'{ll.name} ({author}) ({likes} {like_string})\n'
+        f'{matrix_str}\n'
+        f'\n'
+        f'{fmatrix_str}\n'
+        f'```\n'
+        f'{external_link}\n'
+    )
+
+    return res
