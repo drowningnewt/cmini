@@ -7,7 +7,7 @@ RESTRICTED = False
 def exec(message: Message):
     name = parser.get_arg(message)
     ll = memory.find(name.lower())
-    return layout.fingermap_to_string(ll, id=message.author.id)
+    return layout.fingermap_to_string(ll)
 
 def use():
     return 'fingermap [layout_name]'
