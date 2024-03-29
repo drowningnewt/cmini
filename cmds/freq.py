@@ -19,8 +19,6 @@ def exec(message: Message):
         return "Please provide no more than 6 ngrams"
 
     ngrams = corpora.ngrams(ntype, id=id)
-    total = sum(ngrams.values())
-
     corpus = corpora.get_corpus(id)
     res = ['```', f'{corpus.upper()}']
 
