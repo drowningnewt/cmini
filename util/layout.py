@@ -36,9 +36,9 @@ def get_matrix(ll: Layout) -> list[list[str]]:
     for i, row in enumerate(matrix):
         for j, char in enumerate(row):
             if j == 0:
-                matrix[i][0] = '  ' + char
+                matrix[i][j] = '  ' + char
             elif j == 4:
-                matrix[i][4] += ' '
+                matrix[i][j] += ' '
 
     if ll.board == 'stagger':
         matrix[1][0] = ' ' + matrix[1][0]
