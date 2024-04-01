@@ -34,9 +34,7 @@ def get_matrix(ll: Layout) -> list[list[str]]:
         matrix[row][col] = char
 
     for i, row in enumerate(matrix):
-        for j, _ in enumerate(row):
-            char = matrix[i][j]
-
+        for j, char in enumerate(row):
             if j == 0:
                 matrix[i][j] = '  ' + char
             elif j == 4:
@@ -61,6 +59,62 @@ def get_matrix_str(ll: Layout) -> str:
     return '\n'.join(' '.join(x) for x in get_matrix(ll))
 
 
+def get_commonmatrix(ll1, ll2) -> list[list[str]]:
+    max_width = max(max((x.col if x else 0) for x in ll1.keys.values()),
+                max((x.col if x else 0) for x in ll2.keys.values())) + 1
+    max_height = max(max((x.row if x else 0) for x in ll1.keys.values()),
+                    max((x.row if x else 0) for x in ll2.keys.values())) + 1
+    
+    matrix =  [[' '] * max_width for _ in range(max_height)]
+    matrix1 = [[' '] * max_width for _ in range(max_height)]
+    matrix2 = [[' '] * max_width for _ in range(max_height)]
+
+    for char, info in ll1.keys.items():
+        matrix1[info.row][info.col] = char
+
+    for char, info in ll2.keys.items():
+        matrix2[info.row][info.col] = char
+
+    for i in range(max_height):
+        for j in range(max_width):
+            char1 = matrix1[i][j]
+            char2 = matrix2[i][j]
+            matrix[i][j] = char1 if char1 == char2 else FREE_CHAR
+
+    for i, row in enumerate(matrix):
+        for j, char in enumerate(row):
+            if j == 0:
+                matrix[i][0] = '  ' + char
+            elif j == 4:
+                matrix[i][4] += ' '
+
+    if ll1.board == ll2.board == 'stagger':
+        matrix[1][0] = ' ' + matrix[1][0]
+        matrix[2][0] = '  ' + matrix[2][0]
+    elif ll1.board == ll2.board == 'angle':
+        matrix[2][0] = ' ' + matrix[2][0]
+    elif ll1.board == ll2.board == 'mini':
+        matrix[2][0] = '  ' + matrix[2][0]
+
+    if len(matrix) > 3:
+        try:
+            finger1 = ll1.keys.get(matrix[3][0].strip(), None).finger
+            finger2 = ll2.keys.get(matrix[3][0].strip(), None).finger
+        except Exception:
+            finger1 = None
+            finger2 = None
+
+        indent = 6 if finger1 == 'LT' or finger2 == 'LT' else 13
+
+        matrix[3][0] = ' ' * indent + matrix[3][0]
+
+    return matrix
+
+
+def get_commonmatrix_str(ll1: Layout, ll2: Layout) -> str:
+    return '\n'.join(' '.join(x) for x in get_commonmatrix(ll1, ll2))
+
+
 def get_fingermatrix(ll: Layout) -> list[list[str]]:
     max_width = max(x.col for x in ll.keys.values()) + 1
     max_height = max(x.row for x in ll.keys.values()) + 1
@@ -74,9 +128,7 @@ def get_fingermatrix(ll: Layout) -> list[list[str]]:
         matrix[pos.row][pos.col] = finger_val
 
     for i, row in enumerate(matrix):
-        for j, _ in enumerate(row):
-            val = matrix[i][j]
-
+        for j, val in enumerate(row):
             if j == 0:
                 matrix[i][j] = '  ' + val
             elif j == 4:
