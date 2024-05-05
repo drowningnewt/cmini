@@ -30,6 +30,7 @@ def exec(message: Message):
     lines = []
     
     for gram, count in ngrams.items():
+        gram = gram.lower()
         if len(set(gram)) != len(gram):
             continue
 
