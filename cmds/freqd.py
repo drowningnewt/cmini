@@ -5,7 +5,7 @@ from discord import Message
 from util import corpora, parser
 
 RESTRICTED = True
-MAX_NGRAM = 3
+MAX_NGRAM  = len(corpora.NGRAMS) - 1
 CORPUS_LEN = 7
 
 def exec(message: Message):
