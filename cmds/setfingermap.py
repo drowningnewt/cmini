@@ -1,7 +1,6 @@
 from discord import Message
-from importlib import import_module
 
-from util import layout, memory, parser
+from util import layout, memory, parser, consts
 from util.consts import *
 from util.returns import *
 
@@ -51,7 +50,7 @@ def exec(message: Message):
     ll.board = board
     memory.add(ll)
 
-    return f'Success!\n' + import_module('cmds.fingermap').to_string(ll)
+    return f'Success!\n' + layout.fingermap_to_string(ll)
 
 def use():
     return 'setfingermap [layout name] [FINGERMATRIX]'
@@ -89,18 +88,6 @@ def board_value(rows):
         return
     
 def finger_value(finger):
-    replacements = {
-        '0': 'LP',
-        '1': 'LR',
-        '2': 'LM',
-        '3': 'LI',
-        '4': 'RI',
-        '5': 'RM',
-        '6': 'RR',
-        '7': 'RP',
-        '8': 'LT',
-        '9': 'RT'
-    }
-    for k, v in replacements.items():
-        finger = finger.replace(k, v)
+    for k, v in consts.FINGER_VALUES.items():
+        finger = finger.replace(k, str(v))
     return finger.strip()
