@@ -1,14 +1,13 @@
-from discord import Message
+from discord import Message, ChannelType
 
 from util import corpora, memory, parser
 from util.analyzer import TABLE
 
-OUTPUT = 10
-
 def exec(message: Message):
-    kwargs: dict[str, bool] = parser.get_kwargs(message, str, bad=bool)
+    kwargs: dict[str, bool] = parser.get_kwargs(message, str, len=list, bad=bool)
     layout_name = kwargs['args']
     ll = memory.find(layout_name.lower())
+    is_dm = message.channel.type == ChannelType.private
 
     if not layout_name:
         tips = [
@@ -18,6 +17,8 @@ def exec(message: Message):
             "    view all redirects of a layout",
             "--bad:",
             "    view bad redirects of a layout",
+            "--len [int]:",
+            "    view set number of redirects in dms",
             "```"
         ]
         return '\n'.join(tips)
@@ -25,6 +26,11 @@ def exec(message: Message):
     arg = 'Redirect'
     if kwargs['bad']:
         arg = 'Bad-Redirect'
+
+    if kwargs['len'] and is_dm:
+        leng = int(kwargs['len'][0]) if int(kwargs['len'][0]) <= 100 else 100
+    else:
+        leng = 10
 
     trigrams = corpora.ngrams(3, id=message.author.id)
     total = sum(trigrams.values())
@@ -41,13 +47,14 @@ def exec(message: Message):
         if key in TABLE and TABLE[key].lower().endswith(arg.lower()):
             red[gram] = red.get(gram, 0) + count
 
-    g_total = sum(count for (_, count) in red.items())
+    g_total = sum(count for (_, count) in red.items()) / total
 
     res = []
+    format_len = f'{len(f"{g_total:.3%}")}'
     for ngram, count in red.items():
-        res.append(f'{ngram:<6} {count / total:.3%}')
+        res.append(f'{ngram:<{format_len}} {count / total:.3%}')
 
-    return '\n'.join(['```', f'Top {OUTPUT} {ll.name} {arg}s:'] + res[:OUTPUT] + [f'Total: {g_total / total:.3%}'] + ['```'])
+    return '\n'.join(['```', f'Top {len(res[:leng])} {ll.name} {arg}s:'] + res[:leng] + [f'Total: {g_total:.3%}'] + ['```'])
 
 def use():
     return 'redirects [layout name] [--arg]'
