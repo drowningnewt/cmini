@@ -82,7 +82,7 @@ def exec(message: Message):
     return '\n'.join(['```', f'Top {len(res[:leng])} {ll.name}{f" {tag}" if tag else ""} Alternates:'] + res[:leng] + [f'Total: {g_total:.3%}'] + ['```'])
 
 def use():
-    return 'alternates [layout name]'
+    return 'alternates [layout name] [--args]'
 
 def desc():
     return 'see the highest alternates for a particular layout'
