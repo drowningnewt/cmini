@@ -29,10 +29,10 @@ def exec(message: Message):
         ]
         return '\n'.join(tips)
 
-    sr = kwargs.get('sr', None) or kwargs.get('samerow', None)
-    af = kwargs.get('af', None) or kwargs.get('adjacentfinger', None)
-    inward = kwargs.get('inward', None)
-    outward = kwargs.get('outward', None)
+    sr = kwargs.get('sr') or kwargs.get('samerow')
+    af = kwargs.get('af') or kwargs.get('adjacentfinger')
+    inward = kwargs.get('inward')
+    outward = kwargs.get('outward')
     no_args = not (sr or af or inward or outward)
 
     tag_parts = []
@@ -82,7 +82,7 @@ def exec(message: Message):
     return '\n'.join(['```', f'Top {len(res[:leng])} {ll.name}{f" {tag}" if tag else ""} Alternates:'] + res[:leng] + [f'Total: {g_total:.3%}'] + ['```'])
 
 def use():
-    return 'alternates [layout name] [--args]'
+    return 'alternates [layout name]'
 
 def desc():
     return 'see the highest alternates for a particular layout'
