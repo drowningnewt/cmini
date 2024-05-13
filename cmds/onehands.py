@@ -82,7 +82,7 @@ def exec(message: Message):
     return '\n'.join(['```', f'Top {len(res[:leng])} {ll.name}{f" {tag}" if tag else ""} Onehands:'] + res[:leng] + [f'Total: {g_total:.3%}'] + ['```'])
 
 def use():
-    return 'onehands [layout name]'
+    return 'onehands [layout name] [--args]'
 
 def desc():
     return 'see the highest onehands for a particular layout'
