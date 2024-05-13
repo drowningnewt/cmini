@@ -4,7 +4,12 @@ from util import corpora, memory, parser, consts
 from util.analyzer import TABLE
 
 def exec(message: Message):
-    kwargs: dict[str, bool] = parser.get_kwargs(message, str, len=list, inward=bool, outward=bool, samerow=bool, sr=bool, adjacentfinger=bool, af=bool)
+    kwargs: dict[str, bool] = parser.get_kwargs(message, str, len=list, 
+        inroll=bool, inward=bool, 
+        outroll=bool, outward=bool, 
+        samerow=bool, sr=bool, 
+        adjacentfinger=bool, af=bool
+    )
     layout_name = kwargs['args']
     ll = memory.find(layout_name.lower())
     is_dm = message.channel.type == ChannelType.private
@@ -15,9 +20,9 @@ def exec(message: Message):
             "```",
             "no arg:",
             "    view all rolls of a layout",
-            "--inward",
+            "--inroll",
             "    view inrolls of a layout",
-            "--outward",
+            "--outroll",
             "    view outrolls of a layout",
             "--samerow/sr:",
             "    view same row rolls of a layout",
@@ -31,8 +36,8 @@ def exec(message: Message):
 
     sr = kwargs.get('sr') or kwargs.get('samerow')
     af = kwargs.get('af') or kwargs.get('adjacentfinger')
-    inward = kwargs.get('inward')
-    outward = kwargs.get('outward')
+    inward = kwargs.get('inroll') or kwargs.get('inward')
+    outward = kwargs.get('outroll') or kwargs.get('outward')
     arg = "roll"
     display_arg = "Rolls"
     if inward:
@@ -79,7 +84,7 @@ def exec(message: Message):
     res = []
     format_len = len(f'{g_total:.3%}')
     for ngram, count in rolls.items():
-        res.append(f'{ngram:<{format_len}} {count / total:.3%}')
+        res.append(f'{ngram:{format_len}} {count / total:.3%}')
 
     return '\n'.join(['```', f'Top {len(res[:leng])} {ll.name}{f" {tag}" if tag else ""} {display_arg}:'] + res[:leng] + [f'Total: {g_total:.3%}'] + ['```'])
 
