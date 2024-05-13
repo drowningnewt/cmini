@@ -15,6 +15,8 @@ def exec(message: Message):
             "```",
             "no arg:",
             "    view all redirects of a layout",
+            "--sfs:",
+            "    view sfs redirects of a layout",
             "--bad:",
             "    view bad redirects of a layout",
             "--len [int]:",
