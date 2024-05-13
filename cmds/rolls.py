@@ -77,7 +77,7 @@ def exec(message: Message):
     g_total = sum(count for (_, count) in rolls.items()) / total
 
     res = []
-    format_len = f'{len(f"{g_total:.3%}")}'
+    format_len = len(f'{g_total:.3%}')
     for ngram, count in rolls.items():
         res.append(f'{ngram:<{format_len}} {count / total:.3%}')
 
