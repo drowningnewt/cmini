@@ -34,7 +34,6 @@ def exec(message: Message):
     inward = kwargs.get('inward', None)
     outward = kwargs.get('outward', None)
     no_args = not (sr or af or inward or outward)
-    test = all(not value for _, value in list(kwargs.items())[3:])
 
     tag_parts = []
     if kwargs.get('inward'):
