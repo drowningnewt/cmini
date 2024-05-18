@@ -35,8 +35,8 @@ def exec(message: Message):
     if len(query) > MAX_NGRAM:
         return f'Please provide no more than {MAX_NGRAM} finger values'
     
-    ngrams = {ngram: count for ngram, count in corpora.ngrams(len(query), id=message.author.id).items() if all(ll.keys.get(char.lower()) is not None for char in ngram)}
-    total = 0
+    ngrams = {ngram: count for ngram, count in corpora.ngrams(len(query), id=message.author.id).items()}
+    total = sum(ngrams.values())
     freq = 0
     lines = {}
 
@@ -45,6 +45,7 @@ def exec(message: Message):
 
     for gram, count in ngrams.items():
         gram = gram.lower()
+        
         if len(set(gram)) != len(gram):
             continue
 
@@ -53,8 +54,6 @@ def exec(message: Message):
         if pattern.search(key):
             freq += count
             lines[gram] = lines.get(gram, 0) + count
-
-        total += count
             
     lines = sorted(lines.items(), key=lambda x: x[1], reverse=True)[:10]
     lines = [f'{gram:<5} {count / total:.3%}' for gram, count in lines]
