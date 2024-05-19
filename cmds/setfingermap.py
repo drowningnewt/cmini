@@ -1,8 +1,7 @@
 from discord import Message
 
-from util import layout, memory, parser, consts
+from util import layout, memory, parser
 from util.consts import *
-from util.returns import *
 
 def exec(message: Message):
     name, string = parser.get_layout(message)
@@ -17,7 +16,6 @@ def exec(message: Message):
         return 'Error: improper finger matrix shape provided'
 
     rows = string.split('\n')
-    
     board = board_value(rows)
 
     if not board:
@@ -86,8 +84,9 @@ def board_value(rows):
         return 'ortho'
     else:
         return
-    
+
 def finger_value(finger):
-    for k, v in consts.FINGER_VALUES.items():
-        finger = finger.replace(k, str(v))
+    for k, v in FINGER_VALUES.items():
+        finger = finger.replace(str(v), k)
+        
     return finger.strip()
