@@ -20,21 +20,20 @@ def exec(message: Message):
                 lines.append(ll.name)
 
     is_dm = message.channel.type == ChannelType.private
-    len_limit = get_line_limit(lines) if is_dm else 20
+    len_limit = 250 if is_dm else 20
 
     if len(lines) < len_limit:
         res = lines
-        res_len = len(lines)
         if res_len < 1:
             return "No matches found"
     else:
         res = random.sample(lines, k=len_limit)
-        res_len = len_limit
 
     res = list(sorted(res, key=lambda x: x.lower()))
+    res_len = get_line_limit(res)
     note = "" if len(lines) == res_len else f", here are {res_len} of them"
 
-    return '\n'.join([f'I found {len(lines)} matches{note}', '```'] + res + ['```'])
+    return '\n'.join([f'I found {len(lines)} matches{note}', '```'] + res[:res_len] + ['```'])
 
 
 def use():
