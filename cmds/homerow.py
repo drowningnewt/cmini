@@ -4,6 +4,7 @@ import re
 
 from discord import Message, ChannelType
 from util import parser, memory
+from .search import get_line_limit
 
 def exec(message: Message):
     args = parser.get_args(message)
@@ -19,7 +20,7 @@ def exec(message: Message):
                 lines.append(ll.name)
 
     is_dm = message.channel.type == ChannelType.private
-    len_limit = 150 if is_dm else 20
+    len_limit = get_line_limit(lines) if is_dm else 20
 
     if len(lines) < len_limit:
         res = lines
